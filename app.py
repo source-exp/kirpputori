@@ -23,6 +23,45 @@ def show_item(item_id):
     item = items.get_item(item_id)
     return render_template("show_item.html", item=item)
 
+@app.route("/edit_item/<int:item_id>")
+def edit_item(item_id):
+    item = items.get_item(item_id)
+    return render_template("edit_item.html", item=item)
+
+@app.route("/update_item", methods=["POST"])
+def update_item():
+    item_id = request.form["item_id"]
+    title = request.form["title"]
+    description = request.form["description"]
+    price = request.form["price"]
+
+    items.update_item(item_id, title, price, description)
+
+    return redirect("/item/" + str(item_id))
+
+@app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
+def remove_item(item_id):
+    if request.method == "GET":
+        item = items.get_item(item_id)
+        return render_template("remove_item.html", item=item)
+
+    if request.method == "POST":
+        if "remove" in request.form:
+            items.remove_item(item_id)
+            return redirect("/")
+        else:
+            return redirect("/item/" + str(item_id))
+
+@app.route("/find_item")
+def find_item():
+    query = request.args.get("query")
+    if query:
+        results = items.find_items(query)
+    else:
+        query = ""
+        results = []
+    return render_template("find_item.html", query=query, results=results)
+
 @app.route("/create_item", methods=["POST"])
 def create_item():
     title = request.form["title"]

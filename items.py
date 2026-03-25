@@ -6,9 +6,11 @@ def add_item(title, description, price, user_id):
     db.execute(sql, [title, description, price, user_id])
 
 def get_item(item_id):
-    sql = """SELECT items.title,
+    sql = """SELECT items.id,
+                    items.title,
                     items.description,
                     items.price,
+                    users.id user_id,
                     users.username
              FROM items, users
              WHERE items.user_id = users.id AND
@@ -19,3 +21,22 @@ def get_items():
     sql = "SELECT id, title FROM items ORDER BY id DESC"
     return db.query(sql)
 
+
+def update_item(item_id, title, price, description):
+    sql = """UPDATE items SET title = ?,
+                        description = ?,
+                        price = ?
+                        WHERE id = ?"""
+    db.execute(sql, [title, description, price, item_id])
+
+def remove_item(item_id):
+    sql = "DELETE FROM items WHERE id = ?"
+    db.execute(sql, [item_id])
+
+def find_items(query):
+    sql = """SELECT id, title
+             FROM items
+             WHERE title LIKE ? OR description LIKE ?
+             ORDER BY id DESC"""
+    like = "%" + query + "%"
+    return db.query(sql, [like, like])
