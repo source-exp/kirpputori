@@ -117,16 +117,16 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        return render_template("register.html", error="VIRHE: salasanat eivät ole samat")
     password_hash = generate_password_hash(password1)
 
     try:
         sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
         db.execute(sql, [username, password_hash])
     except sqlite3.IntegrityError:
-        return "VIRHE: tunnus on jo varattu"
+        return render_template("register.html", error="VIRHE: tunnus on jo varattu")
 
-    return "Tunnus luotu"
+    return render_template("success.html", message="Tunnus luotu")
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -138,7 +138,10 @@ def login():
         password = request.form["password"]
         
         sql = "SELECT id, password_hash FROM users WHERE username = ?"
-        result = db.query(sql, [username])[0]
+        rows = db.query(sql, [username])
+        if not rows:
+            return render_template("login.html", error="Väärä tunnus tai salasana")
+        result = rows[0]
         user_id = result["id"]
         password_hash = result["password_hash"]
 
@@ -147,7 +150,7 @@ def login():
             session["username"] = username
             return redirect("/")
         else:
-            return "VIRHE: väärä tunnus tai salasana"
+            return render_template("login.html", error="Väärä tunnus tai salasana")
 
 @app.route("/logout")
 def logout():

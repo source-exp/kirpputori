@@ -26,6 +26,11 @@
     <input type="submit" value="Kirjaudu" />
   </form>
   {% endif %}
+
+  {% if error %}
+    <p style="color: red; margin-top: 10px;">{{ error }}</p>
+  {% endif %}
+  
 </body>
 
 </html>
