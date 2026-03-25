@@ -15,12 +15,12 @@ def get_item(item_id):
              FROM items, users
              WHERE items.user_id = users.id AND
                    items.id = ?"""
-    return db.query(sql, [item_id])[0]
+    result = db.query(sql, [item_id])
+    return result[0] if result else None
 
 def get_items():
     sql = "SELECT id, title FROM items ORDER BY id DESC"
     return db.query(sql)
-
 
 def update_item(item_id, title, price, description):
     sql = """UPDATE items SET title = ?,

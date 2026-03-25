@@ -1,13 +1,18 @@
 from flask import Flask
-from flask import render_template, request, session, redirect
+from flask import abort, render_template, request, session, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
 import sqlite3
 import config
 import db
 import items
+import re
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+
+def require_login():
+    if "user_id" not in session:
+        abort(403)
 
 @app.route("/")
 def index():
@@ -16,24 +21,39 @@ def index():
 
 @app.route("/new_item")
 def new_item():
+    require_login()
     return render_template("new_item.html")
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
     item = items.get_item(item_id)
+    if not item:
+        abort(404)
     return render_template("show_item.html", item=item)
 
 @app.route("/edit_item/<int:item_id>")
 def edit_item(item_id):
+    require_login()
     item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    if item["user_id"] != session["user_id"]:
+        abort(403)
     return render_template("edit_item.html", item=item)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
+    require_login()
     item_id = request.form["item_id"]
     title = request.form["title"]
     description = request.form["description"]
     price = request.form["price"]
+
+    item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    if item["user_id"] != session["user_id"]:
+        abort(403)
 
     items.update_item(item_id, title, price, description)
 
@@ -41,8 +61,14 @@ def update_item():
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
 def remove_item(item_id):
+    require_login()
+    item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    if item["user_id"] != session["user_id"]:
+        abort(403)
+
     if request.method == "GET":
-        item = items.get_item(item_id)
         return render_template("remove_item.html", item=item)
 
     if request.method == "POST":
@@ -64,9 +90,17 @@ def find_item():
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
+    require_login()
+
     title = request.form["title"]
+    if not title or len(title) > 50:
+        abort(403)
     description = request.form["description"]
+    if not description or len(description) > 1000:
+        abort(403)
     price = request.form["price"]
+    if not re.search("^[1-9][0-9]{0,3}$", price):
+        abort(403)
     user_id = session["user_id"]
 
     items.add_item(title, description, price, user_id)    
@@ -117,7 +151,8 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["user_id"]
-    del session["username"]
+    if "user_id" in session:
+        del session["user_id"]
+        del session["username"]
     return redirect("/")
 
