@@ -7,3 +7,23 @@
 * Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä arvosteluja ja käyttäjän lisäämät ilmoitukset.
 * Käyttäjä pystyy valitsemaan tietokohteelle yhden tai useamman luokittelun. Mahdolliset luokat ovat valmiiksi tehtyjä.
 * Sovelluksessa pystyy lähettämään viestejä käyttäjälle, joka on jättänyt ilmoituksen.
+
+## Sovelluksen asennus
+
+Asenna `flask`-kirjasto:
+
+```
+$ pip install flask
+```
+
+Luo tietokannan taulut ja lisää alkutiedot:
+
+```
+$ sqlite3 database.db < schema.sql
+```
+
+Voit käynnistää sovelluksen näin:
+
+```
+$ flask run
+```
