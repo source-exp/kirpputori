@@ -9,6 +9,7 @@ import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
+db.init_db()
 
 def require_login():
     if "user_id" not in session:
