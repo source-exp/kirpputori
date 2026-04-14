@@ -30,14 +30,16 @@ def show_user(user_id):
 @app.route("/new_item")
 def new_item():
     require_login()
-    return render_template("new_item.html")
+    classes = items.get_all_classes()
+    return render_template("new_item.html", classes=classes)
 
 @app.route("/item/<int:item_id>")
 def show_item(item_id):
     item = items.get_item(item_id)
     if not item:
         abort(404)
-    return render_template("show_item.html", item=item)
+    classes = items.get_classes(item_id)
+    return render_template("show_item.html", item=item, classes=classes)
 
 @app.route("/edit_item/<int:item_id>")
 def edit_item(item_id):
@@ -47,7 +49,15 @@ def edit_item(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
-    return render_template("edit_item.html", item=item)
+
+    all_classes = items.get_all_classes()
+    classes = {}
+    for my_class in all_classes:
+        classes[my_class] = ""
+    for entry in items.get_classes(item_id):
+        classes[entry["title"]] = entry["value"]
+
+    return render_template("edit_item.html", item=item, classes=classes, all_classes=all_classes)
 
 @app.route("/update_item", methods=["POST"])
 def update_item():
@@ -62,8 +72,28 @@ def update_item():
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
+        
+    if not re.search("^[1-9][0-9]{0,9}$", price):
+        abort(403)
 
-    items.update_item(item_id, title, price, description)
+    if not title or len(title) > 50:
+        abort(403)
+    description = request.form["description"]
+    if not description or len(description) > 1000:
+        abort(403)
+
+    all_classes = items.get_all_classes()
+    classes = []
+    for entry in request.form.getlist("classes"):
+        if entry:
+            class_title, class_value = entry.split(":")
+            if class_title not in all_classes:
+                abort(403)
+            if class_value not in all_classes[class_title]:
+                abort(403)
+            classes.append((class_title,class_value))
+
+    items.update_item(item_id, title, price, description, classes)
 
     return redirect("/item/" + str(item_id))
 
@@ -107,11 +137,22 @@ def create_item():
     if not description or len(description) > 1000:
         abort(403)
     price = request.form["price"]
-    if not re.search("^[1-9][0-9]{0,3}$", price):
+    if not re.search("^[1-9][0-9]{0,9}$", price):
         abort(403)
     user_id = session["user_id"]
 
-    items.add_item(title, description, price, user_id)    
+    all_classes = items.get_all_classes()
+    classes = []
+    for entry in request.form.getlist("classes"):
+        if entry:
+            class_title, class_value = entry.split(":")
+            if class_title not in all_classes:
+                abort(403)
+            if class_value not in all_classes[class_title]:
+                abort(403)
+            classes.append((class_title,class_value))
+
+    items.add_item(title, description, price, user_id, classes)    
 
     return redirect("/")
 
