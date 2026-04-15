@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Keskustelu {{ item.title }}</title>
+</head>
+
+<body>
+
+  <h1>Ilmoitus: <a href="/item/{{ item.id }}">{{ item.title }}</a></h1>
+  <p>Myyjä: {{ item.username }}</p>
+  <ul>
+    {% for msg in chat_history %}
+    <p>
+      <strong>{% if session.user_id == msg.sender_id %}
+        Sinä
+        {% else %}
+        {{ msg.sender_name }}
+        {% endif %}
+      </strong> 
+      <small>({{ msg.sent_at }})</small>:<br>
+      {{ msg.content }}
+    </p>
+    {% endfor %}
+  </ul>
+
+  <form action="/send_message/{{ item.id }}" method="post">
+    <textarea name="content" required placeholder="Kirjoita viesti..."></textarea>
+    {% if session.user_id == item.user_id %}
+    <input type="hidden" name="receiver_id" value="{{ chat_history[0].sender_id if chat_history else '' }}">
+    {% endif %}
+    <input type="submit" value="Lähetä viesti">
+  </form>
+
+  <p>
+    <a href="/messages">Takaisin viesteihin</a>
+  </p>
+  
+</body>
+
+</html>

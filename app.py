@@ -6,6 +6,7 @@ import db
 import items
 import re
 import users
+import messages
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -27,6 +28,44 @@ def show_user(user_id):
         abort(404)
     items = users.get_items(user_id)
     return render_template("show_user.html", user=user, items=items)
+
+@app.route("/messages")
+def list_chats():
+    require_login()
+    chats = messages.get_user_chats(session["user_id"])
+    return render_template("chat_list.html", chats=chats)
+
+@app.route("/messages/<int:item_id>/")
+def view_chat_item(item_id):
+    require_login()
+    item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    if session["user_id"] == item["user_id"]:
+        return redirect("/messages")
+    return redirect(f"/messages/{item_id}/{item["user_id"]}")
+
+@app.route("/messages/<int:item_id>/<int:partner_id>")
+def view_chat(item_id, partner_id):
+    require_login()
+    item = items.get_item(item_id)
+    if not item:
+        abort(404)
+    chat_history = messages.get_chat_history(session["user_id"], item_id, partner_id)
+    return render_template("chat_room.html", item=item, chat_history=chat_history, partner_id=partner_id)
+
+@app.route("/send_message/<int:item_id>", methods=["POST"])
+def send_message(item_id):
+    require_login()
+    item = items.get_item(item_id)
+    content = request.form["content"]
+    receiver_id = item["user_id"]
+    if session["user_id"] == item["user_id"]:
+        receiver_id = request.form.get("receiver_id")
+    if not receiver_id:
+        abort(400)
+    messages.send_message(session["user_id"], receiver_id, item_id, content)
+    return redirect(f"/messages/{item_id}/{receiver_id}")
 
 @app.route("/new_item")
 def new_item():
@@ -67,16 +106,13 @@ def update_item():
     title = request.form["title"]
     description = request.form["description"]
     price = request.form["price"]
-
     item = items.get_item(item_id)
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
-        
     if not re.search("^[1-9][0-9]{0,9}$", price):
         abort(403)
-
     if not title or len(title) > 50:
         abort(403)
     description = request.form["description"]
@@ -95,7 +131,6 @@ def update_item():
             classes.append((class_title,class_value))
 
     items.update_item(item_id, title, price, description, classes)
-
     return redirect("/item/" + str(item_id))
 
 @app.route("/remove_item/<int:item_id>", methods=["GET", "POST"])
@@ -154,7 +189,6 @@ def create_item():
             classes.append((class_title,class_value))
 
     items.add_item(title, description, price, user_id, classes)    
-
     return redirect("/")
 
 @app.route("/register")
