@@ -7,6 +7,7 @@ import items
 import re
 import users
 import messages
+import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -14,6 +15,10 @@ db.init_db()
 
 def require_login():
     if "user_id" not in session:
+        abort(403)
+
+def check_csrf():
+    if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
 @app.route("/")
@@ -57,6 +62,7 @@ def view_chat(item_id, partner_id):
 @app.route("/send_message/<int:item_id>", methods=["POST"])
 def send_message(item_id):
     require_login()
+    check_csrf()
     item = items.get_item(item_id)
     content = request.form["content"]
     receiver_id = item["user_id"]
@@ -108,7 +114,7 @@ def edit_images(item_id):
 @app.route("/add_image", methods=["POST"])
 def add_image():
     require_login()
-
+    check_csrf()
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
     if not item:
@@ -130,7 +136,7 @@ def add_image():
 @app.route("/remove_images", methods=["POST"])
 def remove_images():
     require_login()
-
+    check_csrf()
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
     if not item:
@@ -164,6 +170,7 @@ def edit_item(item_id):
 @app.route("/update_item", methods=["POST"])
 def update_item():
     require_login()
+    check_csrf()
     item_id = request.form["item_id"]
     title = request.form["title"]
     description = request.form["description"]
@@ -208,6 +215,7 @@ def remove_item(item_id):
         return render_template("remove_item.html", item=item)
 
     if request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             items.remove_item(item_id)
             return redirect("/")
@@ -227,7 +235,7 @@ def find_item():
 @app.route("/create_item", methods=["POST"])
 def create_item():
     require_login()
-
+    check_csrf()
     title = request.form["title"]
     if not title or len(title) > 50:
         abort(403)
@@ -293,6 +301,7 @@ def login():
         if user_id:        
             session["user_id"] = user_id
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             return render_template("login.html", error="Väärä tunnus tai salasana")

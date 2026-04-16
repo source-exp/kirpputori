@@ -29,6 +29,7 @@
     {% if session.user_id == item.user_id %}
     <input type="hidden" name="receiver_id" value="{{ chat_history[0].sender_id if chat_history else '' }}">
     {% endif %}
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä viesti">
   </form>
 
