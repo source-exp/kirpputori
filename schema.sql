@@ -34,6 +34,12 @@ CREATE TABLE IF NOT EXISTS messages(
 	sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE images(
+	id INTEGER PRIMARY KEY,
+	item_id INTEGER REFERENCES items(id),
+	image BLOB
+);
+
 CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id);
 CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id);
 CREATE INDEX IF NOT EXISTS idx_messages_item ON messages(item_id);
