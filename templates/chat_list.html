@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Viestit</title>
-</head>
+{% block title %}Viestit{% endblock %}
 
-<body>
+{% block content %}
   <h1>Viestit</h1>
   {% if chats %}
-  <ul>
+  
     {% for chat in chats %}
-    <li><a href="/messages/{{ chat.item_id }}/{{ chat.partner_id }}">{{ chat.title }} (Käyttäjä: {{ chat.partner_name }})</a></li>
+    <div class="chat"><p><a href="/messages/{{ chat.item_id }}/{{ chat.partner_id }}">{{ chat.partner_name }} <p>Ilmoitus: {{ chat.title }} Viimeinen viesti: {{ chat.last_time }}</p></a></p></div>
     {% endfor %}
-  </ul>
+  
   {% else %}
   <p>Ei löytynyt keskusteluja</p>
   {% endif %}
   <p>
     <a href="/">Takaisin</a>
   </p>
-  
-</body>
-
-</html>
+{% endblock %}

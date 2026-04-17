@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import abort, render_template, request, session, redirect, make_response
+from flask import abort, render_template, request, session, redirect, make_response, flash
 import sqlite3
 import config
 import db
@@ -226,11 +226,11 @@ def remove_item(item_id):
 def find_item():
     query = request.args.get("query")
     if query:
-        results = items.find_items(query)
+        found_items = items.find_items(query)
     else:
         query = ""
-        results = []
-    return render_template("find_item.html", query=query, results=results)
+        found_items = []
+    return render_template("find_item.html", query=query, items=found_items)
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
@@ -273,17 +273,20 @@ def create():
     password1 = request.form["password1"]
     password2 = request.form["password2"]
     if not username or not password1 or not password2:
-        return render_template("register.html", error="VIRHE: Tyhjä kenttä")
+        flash("VIRHE: Tyhjä kenttä", "error")
+        return render_template("register.html")
 
     if password1 != password2:
-        return render_template("register.html", error="VIRHE: salasanat eivät ole samat")
+        flash("VIRHE: salasanat eivät ole samat", "error")
+        return render_template("register.html")
 
     try:
         users.create_user(username, password1)
     except sqlite3.IntegrityError:
-        return render_template("register.html", error="VIRHE: tunnus on jo varattu")
-
-    return render_template("success.html", message="Tunnus luotu")
+        flash("VIRHE: tunnus on jo varattu", "error")
+        return render_template("register.html")
+    flash("Tunnus on luotu", "success")
+    return redirect("/")
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -303,8 +306,8 @@ def login():
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
-        else:
-            return render_template("login.html", error="Väärä tunnus tai salasana")
+        flash("Väärä tunnus tai salasana", "error")    
+        return render_template("login.html")
 
 @app.route("/logout")
 def logout():

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="/static/images/logo.png">
+</head>
+<body>
+	<h1>Kirpputori</h1>
+		{% if session.username %}
+	  <p>
+	    Olet kirjautunut nimellä {{ session.username }}
+	  </p>
+	  	{% endif %}
+	  <p>
+	    <a href="/">Etusivu</a>
+
+	    <a href="/find_item">Etsi ilmoitus</a>
+
+	  {% if session.username %}
+	    <a href="/user/{{ session.user_id }}">Oma profiili</a>
+
+	    <a href="/messages">Viestit</a>
+
+	    <a href="/new_item">Uusi ilmoitus</a>
+
+	    <a href="/logout">Kirjaudu ulos</a>
+	  </p>
+	  
+	  {% else %}
+
+	    <a href="/register">Luo tunnus</a>
+	    <a href="/login">Kirjaudu sisään</a>
+	  </p>
+
+	  {% endif %}
+
+	  {% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+	  {% for category, message in messages %}
+		<div class="{{ category }}"><p>{{ message }}</p><br /></div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+	  {% block content %}{% endblock %}
+</body>
+</html>

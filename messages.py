@@ -4,14 +4,14 @@ def get_user_chats(user_id):
 	sql = """SELECT i.id AS item_id, i.title, 
     CASE WHEN m.sender_id = ? THEN m.receiver_id 
     ELSE m.sender_id END AS partner_id,
-    u.username AS partner_name
+    u.username AS partner_name, MAX(m.sent_at) AS last_time
     FROM items AS i
     JOIN messages AS m ON i.id = m.item_id
     JOIN users AS u ON u.id = CASE WHEN m.sender_id = ? THEN m.receiver_id 
     ELSE m.sender_id END
     WHERE m.sender_id = ? OR m.receiver_id = ?
     GROUP BY i.id, partner_id
-    ORDER BY MAX(m.sent_at) DESC"""
+    ORDER BY last_time DESC"""
 	return db.query(sql, [user_id, user_id, user_id, user_id])
 
 def get_chat_history(user_id, item_id, partner_id):

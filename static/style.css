@@ -1,0 +1,45 @@
+body {
+  margin: auto;
+  max-width: 50em;
+  font-family: "Courier New", monospace;
+  background-color: #ffdfdf;
+}
+
+.item {
+  border: 1px solid black;
+  margin: 1em;
+  padding: 0.2em 1em;  
+  background-color: #fff0f0;
+}
+
+.success {
+  border: 1px solid black;
+  margin: 1em;
+  padding: 0.2em 1em;
+  background-color: #e8ffce;
+}
+
+.error {
+  border: 1px solid black;
+  margin: 1em;
+  padding: 0.2em 1em;
+  background-color: #ffc4c4;
+}
+
+.chat {
+  border: 1px solid black;
+  margin: 1em;
+  padding: 0.2em 5em;  
+  background-color: #fff0f0;
+}
+
+.message {
+  height: 300px;
+  border: 1px solid black;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  margin: 1em;
+  padding: 0.2em 5em;  
+  background-color: #fff0f0;
+}

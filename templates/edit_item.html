@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Ilmoituksen muokkaus</title>
-</head>
+{% block title %}Ilmoituksen muokkaus{% endblock %}
 
-<body>
+{% block content %}
   <h1>Ilmoituksen muokkaus</h1>
   <form action="/update_item" method="post">
     <p>
@@ -41,6 +38,4 @@
   <p>
     <a href="/item/{{ item.id }}">Takaisin</a>
   </p>
-</body>
-
-</html>
+{% endblock %}

@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Rekisteröinti</title>
-</head>
+{% block title %}Ilmoituksen poisto{% endblock %}
 
-<body>
+{% block content %}
+
   <form action="/create" method="post">
     <p>
       Tunnus: <br />
@@ -21,12 +19,8 @@
     </p>
     <input type="submit" value="Luo tunnus" />
   </form>
-    {% if error %}
-      <p style="color: red; margin-top: 10px;">{{ error }}</p>
-    {% endif %}
   <p>
     <a href="/">Takaisin</a>
   </p>
-</body>
 
-</html>
+{% endblock %}

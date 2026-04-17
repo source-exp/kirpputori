@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Ilmoituksen kuvat</title>
-</head>
+{% block title %}Ilmoituksen kuvat{% endblock %}
 
-<body>
+{% block content %}
   <h1>Ilmoituksen kuvat</h1>
 
   <p>
@@ -38,6 +35,4 @@
   <p>
     <a href="/item/{{ item.id }}">Takaisin</a>
   </p>
-</body>
-
-</html>
+{% endblock %}

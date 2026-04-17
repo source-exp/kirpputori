@@ -1,18 +1,20 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Keskustelu {{ item.title }}</title>
-</head>
+{% block title %}Keskustelu {{ item.title }}{% endblock %}
 
-<body>
+{% block content %}
 
   <h1>Ilmoitus: <a href="/item/{{ item.id }}">{{ item.title }}</a></h1>
-  <p>Myyjä: {{ item.username }}</p>
-  <ul>
+
+  {% if session.user_id != item.user_id %}
+    <p>Myyjä: {{ item.username }}</p>
+  {% endif %}
+
+  <div class="message">
     {% for msg in chat_history %}
     <p>
-      <strong>{% if session.user_id == msg.sender_id %}
+      <strong>
+        {% if session.user_id == msg.sender_id %}
         Sinä
         {% else %}
         {{ msg.sender_name }}
@@ -22,7 +24,7 @@
       {{ msg.content }}
     </p>
     {% endfor %}
-  </ul>
+  </div>
 
   <form action="/send_message/{{ item.id }}" method="post">
     <textarea name="content" required placeholder="Kirjoita viesti..."></textarea>
@@ -36,7 +38,5 @@
   <p>
     <a href="/messages">Takaisin viesteihin</a>
   </p>
-  
-</body>
 
-</html>
+{% endblock %}
