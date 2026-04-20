@@ -184,7 +184,6 @@ def update_item():
         abort(403)
     if not title or len(title) > 50:
         abort(403)
-    description = request.form["description"]
     if not description or len(description) > 1000:
         abort(403)
 
@@ -197,7 +196,7 @@ def update_item():
                 abort(403)
             if class_value not in all_classes[class_title]:
                 abort(403)
-            classes.append((class_title,class_value))
+            classes.append((class_title, class_value))
 
     items.update_item(item_id, title, price, description, classes)
     return redirect("/item/" + str(item_id))
@@ -286,7 +285,7 @@ def create():
         flash("VIRHE: tunnus on jo varattu", "error")
         return render_template("register.html")
     flash("Tunnus on luotu", "success")
-    return redirect("/")
+    return redirect("/login")
 
 @app.route("/login", methods=["GET","POST"])
 def login():
@@ -314,5 +313,6 @@ def logout():
     if "user_id" in session:
         del session["user_id"]
         del session["username"]
+        del session["csrf_token"]
     return redirect("/")
 
