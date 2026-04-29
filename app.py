@@ -135,6 +135,11 @@ def add_image():
     if item["user_id"] != session["user_id"]:
         abort(403)
 
+    current_images = items.get_images(item_id)
+    if len(current_images) >= 10:
+        flash("VIRHE: voit lisätä enintään 10 kuvaa", "error")
+        return redirect("/images/" + str(item_id))
+
     file = request.files["image"]
     if not file.filename.endswith(".png"):
         flash("VIRHE: väärä tiedostomuoto", "error")
@@ -284,7 +289,8 @@ def create_item():
                 abort(403)
             classes.append((class_title,class_value))
 
-    items.add_item(title, description, price, user_id, classes)    
+    items.add_item(title, description, price, user_id, classes) 
+    flash("Ilmoitus on luotu", "success")   
     return redirect("/")
 
 @app.route("/register")

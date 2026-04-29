@@ -21,7 +21,7 @@
       <input type="submit" value="Poista valitut" />
     </p>
   </form>
-  
+{% if images | count < 10 %}  
   <h1>Lisää uusi kuva</h1>
   <form action="/add_image" method="post" enctype="multipart/form-data">
     <p>
@@ -31,7 +31,13 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä" />
   </form>
-
+{% else %}
+  <br>
+    <div class="error">
+      <p><strong>Olet saavuttanut maksimimäärän (10 kuvaa).</strong> Poista vanhoja kuvia, jos haluat lisätä uusia.</p>
+    </div>
+{% endif %}
+  
   <p class="navbar">
     <a href="/item/{{ item.id }}">Takaisin ilmoitukseen</a>
   </p>

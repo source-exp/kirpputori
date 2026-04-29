@@ -10,7 +10,49 @@ body {
   margin: 1em;
   padding: 0.2em 1em;  
   background-color: #fff0f0;
+  border-radius: 8px;
   display: flex-wrap;
+  text-decoration: none;
+  color: black;
+}
+
+.item a {
+  font-weight: bold;
+  color: black;
+  transition: color 0.2s;
+}
+
+.item a:hover {
+  color: #ffc4c4;
+}
+
+.item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.item-title {
+  font-size: 1.2em;
+  display: inline-block;
+  margin-bottom: 1px;
+}
+
+h1 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.item-description {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding: 1em;
+  background-color: #ffebeb;
+  border-radius: 4px;
 }
 
 .success {
@@ -29,18 +71,31 @@ body {
 
 .chat {
   border: 1px solid black;
-  margin: 1em;
-  padding: 0.2em 5em;  
+  margin: 1em 0;
+  padding: 1em;
   background-color: #fff0f0;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.chat:hover {
+  background-color: #ffc4c4;
+}
+
+.chat a {
+  text-decoration: none;
+  color: black;
+  display: block;
 }
 
 .message {
-  height: 300px;
+  height: 500px;
   border: 1px solid black;
   overflow-y: auto;
   display: flex;
   flex-direction: column-reverse;
   margin: 1em;
+  border-radius: 8px;
   padding: 0.2em 5em;  
   background-color: #fff0f0;
 }
@@ -55,7 +110,7 @@ select {
   padding: 10px;
   margin: 5px 0 15px 0;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 8px;
   font-family: "Courier New", monospace;
   box-sizing: border-box;
 }
@@ -69,6 +124,7 @@ select {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .submit:hover, input[type="submit"]:hover {
@@ -83,6 +139,7 @@ select {
   padding: 10px;
   border: 1px solid black;
   margin-bottom: 0 auto 30px auto;
+  border-radius: 8px;
   width: auto;
   justify-content: center; 
   align-items: center;
@@ -95,6 +152,7 @@ select {
   border: 1px solid #ccc;
   background-color: #feecec;
   border-radius: 4px;
+  transition: background-color 0.2s;
 }
 
 .navbar a:hover {

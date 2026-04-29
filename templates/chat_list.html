@@ -7,7 +7,12 @@
   {% if chats %}
   
     {% for chat in chats %}
-    <div class="chat"><p><a href="/messages/{{ chat.item_id }}/{{ chat.partner_id }}">{{ chat.partner_name }} <p>Ilmoitus: {{ chat.title }} Viimeinen viesti: {{ chat.last_time }}</p></a></p></div>
+    <div class="chat">
+      <a href="/messages/{{ chat.item_id }}/{{ chat.partner_id }}"><strong>{{ chat.partner_name }}</strong> 
+        <p>Ilmoitus: {{ chat.title }}</p>
+        <p>Viimeinen viesti: {{ chat.last_time }}</p>
+      </a>
+    </div>
     {% endfor %}
   
   {% else %}

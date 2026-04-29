@@ -3,26 +3,26 @@
 {% block title %}{{ item.title }}{% endblock %}
 
 {% block content %}
-
+  <div class="item">
   <h1>{{ item.title }}</h1>
-   {% for image in images %}
-  <img src="/image/{{ image.id}}" />
+  {% for image in images %}
+  <img src="/image/{{ image.id }}" />
   {% endfor %}
-  <p>
+  <p class="item-description">
      {{ item.description }}
   </p>
   <p>
-    Ilmoittaja: <a href="/user/{{ item.user_id }}">{{ item.username }}</a>
+    <strong>Ilmoittaja:</strong> <a href="/user/{{ item.user_id }}">{{ item.username }}</a>
   </p>
   {% if classes %}
       {% for class in classes %}
-      <p>{{ class.title}}: {{ class.value }}</p>
+      <p><strong>{{ class.title}}:</strong> {{ class.value }}</p>
       {% endfor %}
   {% endif %}
   <p>
-    Hinta: {{ item.price }}€
+    <strong>Hinta: {{ item.price }}€</strong>
   </p>
-
+  </div>
   {% if session.user_id == item.user_id %}
   <p class="navbar">
     <a href="/edit_item/{{ item.id }}">Muokkaa</a>
