@@ -10,6 +10,7 @@ body {
   margin: 1em;
   padding: 0.2em 1em;  
   background-color: #fff0f0;
+  display: flex-wrap;
 }
 
 .success {
@@ -80,4 +81,32 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  background-color: #fff0f0;
+  padding: 10px;
+  border: 1px solid black;
+  margin-bottom: 30px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: black;
+  padding: 5px 5px;
+  border: 1px solid #ccc;
+  background-color: #feecec;
+  border-radius: 4px;
+}
+
+.navbar a:hover {
+  background-color: #ffc4c4;
+}
+
+.user-info {
+  margin-top: -10px;
+  margin-bottom: 20px;
 }

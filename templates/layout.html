@@ -6,13 +6,16 @@
   <link rel="icon" href="/static/images/logo.png">
 </head>
 <body>
+	<header>
 	<h1>Kirpputori</h1>
 		{% if session.username %}
-	  <p>
+	  <p class="user-info">
 	    Olet kirjautunut nimellä {{ session.username }}
 	  </p>
 	  	{% endif %}
 	  <p>
+	</header>
+	<nav class="navbar">
 	    <a href="/">Etusivu</a>
 
 	    <a href="/find_item">Etsi ilmoitus</a>
@@ -34,7 +37,7 @@
 	  </p>
 
 	  {% endif %}
-
+	</nav>
 	  {% with messages = get_flashed_messages(with_categories=true) %}
 	  {% if messages %}
 	  {% for category, message in messages %}
