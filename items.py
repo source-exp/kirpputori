@@ -90,15 +90,33 @@ def remove_item(item_id):
     db.execute(sql, [item_id])
 
 
-def find_items(query):
+def find_items(query, classes):
     sql = """SELECT items.id, 
                     items.title, 
                     items.price, 
                     users.id user_id, 
                     users.username 
-             FROM items JOIN users ON items.user_id = users.id
-             WHERE items.title LIKE ? OR items.description LIKE ?
-             GROUP BY items.id
-             ORDER BY items.id DESC"""
-    like = "%" + query + "%"
-    return db.query(sql, [like, like])
+             FROM items JOIN users ON items.user_id = users.id"""
+
+    params = []
+    where_query = []
+
+    if query:
+        where_query.append("(items.title LIKE ? OR items.description LIKE ?)")
+        like = "%" + query + "%"
+        params.extend([like, like])
+
+    if classes:
+        for c, class_value in enumerate(classes):
+            title, value = class_value.split(":",1)
+            alias = f"ic{c}"
+            sql += f" JOIN item_classes {alias} ON items.id = {alias}.item_id"
+            where_query.append(f"{alias}.title = ? AND {alias}.value = ?")
+            params.extend([title, value])
+    
+    if where_query:
+        sql += " WHERE " + " AND ".join(where_query)
+
+    sql += " GROUP BY items.id ORDER BY items.id DESC"
+
+    return db.query(sql, params)

@@ -224,13 +224,20 @@ def remove_item(item_id):
 
 @app.route("/find_item")
 def find_item():
-    query = request.args.get("query")
-    if query:
-        found_items = items.find_items(query)
+    query = request.args.get("query", "")
+    all_classes = items.get_all_classes()
+    classes = request.args.getlist("classes")
+
+    validated_classes = [c for c in classes if c]
+
+    if query or classes:
+        found_items = items.find_items(query, validated_classes)
+        search_done = True
     else:
-        query = ""
         found_items = []
-    return render_template("find_item.html", query=query, items=found_items)
+        search_done = False
+
+    return render_template("find_item.html", query=query, items=found_items, classes=classes, all_classes=all_classes, search_done=search_done)
 
 @app.route("/create_item", methods=["POST"])
 def create_item():

@@ -6,20 +6,34 @@
   <h1>Etsi ilmoitus</h1>
   <form action="/find_item" method="get">
     <p>
-      Hakusana: <input type="text" name="query" value="{{ query }}">
+      Hakusana: <input type="text" name="query" value="{% if query %}{{ query }}{% endif %}">
     </p>
-    <input type="submit" value="Lähetä">
+    {% for class in all_classes %}
+    <p>
+      {{ class }}: <br />
+      <select name="classes">
+        <option value="">-</option>
+      {% for option in all_classes[class] %}
+        {% set class_value = class ~ ":" ~ option %}
+        <option value="{{ class_value }}" {% if classes and class_value in classes %}selected{% endif %}>
+          {{ option }}
+        </option>
+      {% endfor %}
+      </select>
+    </p>
+    {% endfor %}
+    <input type="submit" value="Hae">
   </form>
-  <p>
-    <a href="/">Takaisin</a>
-  </p>
-  {% if query and items %}
+  {% if search_done and items %}
   <h2>Tulokset</h2>
   {% include "items_layout.html" %}
-  {% elif query %}
+  {% elif search_done %}
     <p> 
       Ei löytynyt
     </p>
   {% endif %}
+  <p>
+    <a href="/">Takaisin</a>
+  </p>
 
 {% endblock %}

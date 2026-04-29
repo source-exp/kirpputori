@@ -45,11 +45,13 @@ body {
   background-color: #fff0f0;
 }
 
+.submit,
 input[type="text"], 
 input[type="password"], 
 input[type="number"], 
 textarea, 
 select {
+  text-decoration: none;
   width: 100%;
   padding: 10px;
   margin: 5px 0 15px 0;
@@ -59,7 +61,7 @@ select {
   box-sizing: border-box;
 }
 
-input[type="submit"] {
+.submit, input[type="submit"] {
   background-color: #eafee3;
   font-family: "Courier New", monospace;
   color: black;
@@ -69,7 +71,7 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-input[type="submit"]:hover {
+.submit, input[type="submit"]:hover {
   background-color: #d4ffc5;
 }
 

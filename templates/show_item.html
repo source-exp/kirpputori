@@ -6,11 +6,13 @@
 
   <h1>{{ item.title }}</h1>
   {% if session.user_id == item.user_id %}
+  <nav class="navbar">
   <p>
     <a href="/edit_item/{{ item.id }}">Muokkaa</a>
     <a href="/remove_item/{{ item.id }}">Poista</a>
     <a href="/images/{{ item.id }}">Kuvat</a>
   </p>
+  </nav>
   {% endif %}
    {% for image in images %}
   <img src="/image/{{ image.id}}" />
@@ -33,7 +35,7 @@
   {% if session.user_id and session.user_id != item.user_id %}
 
   <p>
-    <a href="/messages/{{ item.id }}">Lähetä viesti</a>
+    <a class="submit" href="/messages/{{ item.id }}">Lähetä viesti</a>
   </p>
 
   {% endif %}
