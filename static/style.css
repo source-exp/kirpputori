@@ -43,3 +43,41 @@ body {
   padding: 0.2em 5em;  
   background-color: #fff0f0;
 }
+
+input[type="text"], 
+input[type="password"], 
+input[type="number"], 
+textarea, 
+select {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: "Courier New", monospace;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  background-color: #eafee3;
+  font-family: "Courier New", monospace;
+  color: black;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #d4ffc5;
+}
+
+button {
+  padding: 1px 1px;
+  font-family: "Courier New", monospace;
+  background-color: #feecec;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}

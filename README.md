@@ -16,7 +16,12 @@ Asenna `flask`-kirjasto:
 $ pip install flask
 ```
 
-Tietokannan taulujen ja alkutietojen luonti tapahtuu automaattisesti sovelluksen käynnistyessä
+Tietokannan taulujen ja alkutietojen luonti tapahtuu automaattisesti sovelluksen käynnistyessä tai voi manuaalisesti luoda tietokannan taulut ja lisätä alkutiedot:
+
+```
+$ sqlite3 database.db < schema.sql
+$ sqlite3 database.db < init.sql
+```
 
 Voit käynnistää sovelluksen näin:
 

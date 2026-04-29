@@ -93,7 +93,6 @@ def show_image(image_id):
     image = items.get_image(image_id)
     if not image:
         abort(404)
-
     response = make_response(bytes(image))
     response.headers.set("Content-Type", "image/png")
     return response
@@ -124,11 +123,13 @@ def add_image():
 
     file = request.files["image"]
     if not file.filename.endswith(".png"):
-        return "VIRHE: väärä tiedostomuoto"
+        flash("VIRHE: väärä tiedostomuoto", "error")
+        return redirect("/images/" + str(item_id))
 
     image = file.read()
     if len(image) > 100 * 1024:
-        return "VIRHE: liian suuri kuva"
+        flash("VIRHE: liian suuri kuva", "error")
+        return redirect("/images/" + str(item_id))
 
     items.add_image(item_id, image)
     return redirect("/images/" + str(item_id))
