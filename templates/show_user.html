@@ -6,7 +6,7 @@
 
   <h1>Käyttäjä {{ user.username }}</h1>
   <p>
-    Käyttäjällä on yhteensä {{ items | count }} ilmoitusta.
+    Käyttäjällä on yhteensä {{ total_items }} ilmoitusta.
   </p>
   <h2>Ilmoitukset</h2>
   {% if items %}
@@ -16,9 +16,5 @@
       Ei ilmoituksia
     </p>
   {% endif %}
-
-  <p>
-    <a href="/">Takaisin</a>
-  </p>
   
 {% endblock %}

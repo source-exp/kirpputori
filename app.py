@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import abort, render_template, request, session, redirect, make_response, flash
+from flask import abort, render_template, request, session, redirect, make_response, flash, url_for
 import sqlite3
 import config
 import db
@@ -23,16 +23,26 @@ def check_csrf():
 
 @app.route("/")
 def index():
-    all_items = items.get_items()
-    return render_template("index.html", items=all_items)
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
+    offset = (page - 1) * per_page
+
+    all_items = items.get_items(limit=per_page, offset=offset)
+    return render_template("index.html", items=all_items, page=page, per_page=per_page)
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
     user = users.get_user(user_id)
     if not user:
         abort(404)
-    items = users.get_items(user_id)
-    return render_template("show_user.html", user=user, items=items)
+
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
+    offset = (page - 1) * per_page
+
+    user_items = users.get_items(user_id, limit=per_page, offset=offset)
+    total_items = users.get_item_count(user_id)
+    return render_template("show_user.html", user=user, items=user_items, page=page, total_items=total_items)
 
 @app.route("/messages")
 def list_chats():
@@ -56,8 +66,12 @@ def view_chat(item_id, partner_id):
     item = items.get_item(item_id)
     if not item:
         abort(404)
-    chat_history = messages.get_chat_history(session["user_id"], item_id, partner_id)
-    return render_template("chat_room.html", item=item, chat_history=chat_history, partner_id=partner_id)
+
+    page = request.args.get("page", 1, type=int)
+    limit = page * 20
+
+    chat_history = messages.get_chat_history(session["user_id"], item_id, partner_id, limit=limit)
+    return render_template("chat_room.html", item=item, chat_history=chat_history, partner_id=partner_id, page=page)
 
 @app.route("/send_message/<int:item_id>", methods=["POST"])
 def send_message(item_id):
@@ -228,16 +242,21 @@ def find_item():
     all_classes = items.get_all_classes()
     classes = request.args.getlist("classes")
 
+    page = request.args.get("page", 1, type=int)
+    per_page = 20
+    offset = (page - 1) * per_page
+
     validated_classes = [c for c in classes if c]
+    found_items = []
+    search_done = False
 
     if query or classes:
-        found_items = items.find_items(query, validated_classes)
+        found_items = items.find_items(query, validated_classes, limit=per_page, offset=offset)
         search_done = True
-    else:
-        found_items = []
-        search_done = False
 
-    return render_template("find_item.html", query=query, items=found_items, classes=classes, all_classes=all_classes, search_done=search_done)
+    return render_template("find_item.html", 
+                            query=query, items=found_items, classes=classes, 
+                            all_classes=all_classes, search_done=search_done, page=page)
 
 @app.route("/create_item", methods=["POST"])
 def create_item():

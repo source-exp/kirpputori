@@ -8,7 +8,7 @@
 
   {% if session.user_id != item.user_id %}
     <p>Myyjä: {{ item.username }}</p>
-  {% endif %}
+  {% endif %}  
 
   <div class="message">
     {% for msg in chat_history %}
@@ -24,18 +24,23 @@
       {{ msg.content }}
     </p>
     {% endfor %}
+    {% if chat_history|length == page * 20 %}
+    <p class="navbar">
+      <a href="/messages/{{ item.id }}/{{ partner_id }}?page={{ page + 1 }}">Lataa vanhempia viestejä</a>
+    </p>
+    {% endif %}
   </div>
 
   <form action="/send_message/{{ item.id }}" method="post">
     <textarea name="content" required placeholder="Kirjoita viesti..."></textarea>
     {% if session.user_id == item.user_id %}
-    <input type="hidden" name="receiver_id" value="{{ chat_history[0].sender_id if chat_history else '' }}">
+    <input type="hidden" name="receiver_id" value="{{ partner_id }}">
     {% endif %}
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Lähetä viesti">
   </form>
 
-  <p>
+  <p class="navbar">
     <a href="/messages">Takaisin viesteihin</a>
   </p>
 

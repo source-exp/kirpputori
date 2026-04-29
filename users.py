@@ -6,7 +6,7 @@ def get_user(user_id):
 	result = db.query(sql, [user_id])
 	return result[0] if result else None
 
-def get_items(user_id):
+def get_items(user_id, limit=20, offset=0):
 	sql = """SELECT items.id,
                     items.title,
                     items.description,
@@ -15,8 +15,9 @@ def get_items(user_id):
                     users.username 
 	FROM items JOIN users ON items.user_id = users.id
 	WHERE items.user_id = ?
-	ORDER BY items.id DESC"""
-	return db.query(sql, [user_id])
+	ORDER BY items.id DESC
+	LIMIT ? OFFSET ?"""
+	return db.query(sql, [user_id, limit, offset])
 
 def create_user(username, password):
 	password_hash = generate_password_hash(password)
@@ -36,3 +37,8 @@ def check_login(username, password):
 		return user_id
 	else:
 		return None
+
+def get_item_count(user_id):
+    sql = "SELECT COUNT(*) FROM items WHERE user_id = ?"
+    result = db.query(sql, [user_id])
+    return result[0][0] if result else 0

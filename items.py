@@ -55,15 +55,16 @@ def get_item(item_id):
     result = db.query(sql, [item_id])
     return result[0] if result else None
 
-def get_items():
+def get_items(limit=20, offset=0):
     sql = """SELECT items.id, 
                     items.title, 
                     items.price, 
                     users.id user_id, 
                     users.username 
     FROM items JOIN users ON items.user_id = users.id
-    ORDER BY items.id DESC"""
-    return db.query(sql)
+    ORDER BY items.id DESC
+    LIMIT ? OFFSET ?"""
+    return db.query(sql, [limit, offset])
 
 def update_item(item_id, title, price, description, classes):
     sql = """UPDATE items SET title = ?,
@@ -90,7 +91,7 @@ def remove_item(item_id):
     db.execute(sql, [item_id])
 
 
-def find_items(query, classes):
+def find_items(query, classes, limit=20, offset=0):
     sql = """SELECT items.id, 
                     items.title, 
                     items.price, 
@@ -117,6 +118,6 @@ def find_items(query, classes):
     if where_query:
         sql += " WHERE " + " AND ".join(where_query)
 
-    sql += " GROUP BY items.id ORDER BY items.id DESC"
-
+    sql += " GROUP BY items.id ORDER BY items.id DESC LIMIT ? OFFSET ?"
+    params.extend([limit, offset])
     return db.query(sql, params)

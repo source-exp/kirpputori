@@ -3,6 +3,7 @@
 {% block title %}Uusi ilmoitus{% endblock %}
 
 {% block content %}
+
   <h1>Uusi ilmoitus</h1>
   <form action="/create_item" method="post">
     <p>
@@ -29,7 +30,5 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Luo ilmoitus" />
   </form>
-  <p>
-    <a href="/">Takaisin</a>
-  </p>
+  
 {% endblock %}

@@ -2,11 +2,35 @@
   
   {% for item in items %}
   <div class="item">
-  <a href="/item/{{ item.id }}">{{ item.title }}</a> <br />
-  Ilmottaja: <a href="/user/{{ item.user_id }}">{{ item.username }}</a> <br />
-  Hinta: {{ item.price }}€
+    <a href="/item/{{ item.id }}">{{ item.title }}</a> <br />
+    Ilmottaja: <a href="/user/{{ item.user_id }}">{{ item.username }}</a> <br />
+    Hinta: {{ item.price }}€
   </div>
   {% endfor %}
+
+  <div class="navbar">
+    {% if request.endpoint == 'show_user' %}
+      {% set prev_url = url_for('show_user', user_id=user.id, page=page-1) %}
+      {% set next_url = url_for('show_user', user_id=user.id, page=page+1) %}
+      
+    {% elif request.endpoint == 'find_item' %}
+      {% set prev_url = url_for('find_item', query=query, classes=classes, page=page-1) %}
+      {% set next_url = url_for('find_item', query=query, classes=classes, page=page+1) %}
+      
+    {% else %}
+      {% set prev_url = url_for('index', page=page-1) %}
+      {% set next_url = url_for('index', page=page+1) %}
+    {% endif %}
+
+    {% if page > 1 %}
+      <a class="submit" href="{{ prev_url }}">&laquo; Edellinen sivu</a>
+    {% endif %}
+
+    {% if items|length == 20 %}
+      <a class="submit" href="{{ next_url }}">Seuraava sivu &raquo;</a>
+    {% endif %}
+  </div>
+
   {% else %}
     <p> 
       Ei ilmoituksia
