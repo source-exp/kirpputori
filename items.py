@@ -35,8 +35,8 @@ def add_item(title, description, price, user_id, classes):
     db.execute(sql, [title, description, price, user_id])
     item_id = db.last_insert_id()
     sql = "INSERT INTO item_classes (item_id, title, value) VALUES (?,?,?)"
-    for title, value in classes:
-        db.execute(sql,[item_id, title, value])
+    for class_title, class_value in classes:
+        db.execute(sql,[item_id, class_title, class_value])
 
 def get_classes(item_id):
     sql = "SELECT title, value FROM item_classes WHERE item_id = ?"

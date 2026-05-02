@@ -28,3 +28,29 @@ Voit käynnistää sovelluksen näin:
 ```
 $ flask run
 ```
+
+## Sovelluksen testattu suurella tietomäärällä
+`seed.py` tiedostolla voi kokeila miten ohjelma käyttäytyy suurien tietomäärien kanssa. Kaikki tarvittavat kirjastot ovat valmiiksi asennettuna `Sovelluksen asennus` kohdalta.
+Koodi valmiiksi luo:
+* 100 käyttäjää
+* 25 ilmoitusta jokaiselle käyttäjälle
+* 25 viestiä satunaisille käyttäjälle
+Jokaisen käyttäjän salasanaksi on asetettu "0"
+Luodaan tietokanta seuraavalla komenolla:
+```
+$ python3 seed.py
+```
+
+### Tulokset
+Tietokannan luomisen jälkeen nopeus eri sivuilla on seuraava:
+
+* `/`: `3 ms`
+* `/?page=4`: `6 ms`
+* `/user/98`: `20 ms` (satunnainen käyttäjä, jolla on 25 ilmoitusta)
+* `/find_item?query=&classes=&classes=`: `5 ms`
+
+
+
+
+
+

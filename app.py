@@ -1,13 +1,13 @@
+import sqlite3
+import re
+import secrets
 from flask import Flask
 from flask import abort, render_template, request, session, redirect, make_response, flash, url_for
-import sqlite3
 import config
 import db
 import items
-import re
 import users
 import messages
-import secrets
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -42,7 +42,7 @@ def show_user(user_id):
 
     user_items = users.get_items(user_id, limit=per_page, offset=offset)
     total_items = users.get_item_count(user_id)
-    return render_template("show_user.html", user=user, items=user_items, 
+    return render_template("show_user.html", user=user, items=user_items,
                             page=page, total_items=total_items)
 
 @app.route("/messages")
@@ -60,7 +60,7 @@ def view_chat_item(item_id):
         abort(404)
     if session["user_id"] == item["user_id"]:
         return redirect("/messages")
-        
+
     return redirect(f"/messages/{item_id}/{item["user_id"]}")
 
 @app.route("/messages/<int:item_id>/<int:partner_id>")
@@ -74,8 +74,8 @@ def view_chat(item_id, partner_id):
     limit = page * 20
 
     chat_history = messages.get_chat_history(session["user_id"], item_id, partner_id, limit=limit)
-    return render_template("chat_room.html", item=item, 
-                            chat_history=chat_history, 
+    return render_template("chat_room.html", item=item,
+                            chat_history=chat_history,
                             partner_id=partner_id, page=page)
 
 @app.route("/send_message/<int:item_id>", methods=["POST"])
@@ -248,8 +248,7 @@ def remove_item(item_id):
         if "remove" in request.form:
             items.remove_item(item_id)
             return redirect("/")
-        else:
-            return redirect("/item/" + str(item_id))
+        return redirect("/item/" + str(item_id))
 
 @app.route("/find_item")
 def find_item():
@@ -269,9 +268,9 @@ def find_item():
         found_items = items.find_items(query, validated_classes, limit=per_page, offset=offset)
         search_done = True
 
-    return render_template("find_item.html", 
-                            query=query, items=found_items, classes=classes, 
-                            all_classes=all_classes, search_done=search_done, 
+    return render_template("find_item.html",
+                            query=query, items=found_items, classes=classes,
+                            all_classes=all_classes, search_done=search_done,
                             page=page)
 
 @app.route("/create_item", methods=["POST"])
@@ -301,14 +300,14 @@ def create_item():
                 abort(403)
             classes.append((class_title,class_value))
 
-    items.add_item(title, description, price, user_id, classes) 
-    flash("Ilmoitus on luotu", "success")   
+    items.add_item(title, description, price, user_id, classes)
+    flash("Ilmoitus on luotu", "success")
     return redirect("/")
 
 @app.route("/register")
 def register():
     if "user_id" in session:
-            return redirect("/")
+        return redirect("/")
     return render_template("register.html")
 
 @app.route("/create", methods=["POST"])
@@ -343,16 +342,17 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        
+
         user_id = users.check_login(username,password)
 
-        if user_id:        
+        if user_id:
             session["user_id"] = user_id
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
-        flash("Väärä tunnus tai salasana", "error")    
+        flash("Väärä tunnus tai salasana", "error")
         return render_template("login.html")
+    return redirect("/")
 
 @app.route("/logout")
 def logout():
@@ -361,4 +361,3 @@ def logout():
         del session["username"]
         del session["csrf_token"]
     return redirect("/")
-
