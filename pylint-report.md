@@ -238,7 +238,7 @@ Ilmoitus vittaa:
 ```txt
 app.py:234:0: R1710: Either all return statements in a function should return an expression, or none of them should. (inconsistent-return-statements)
 ```
-Jossa sijaitsee taulun poistamisen funktio, jolloin jos ehdot eivät täydy ei pylintin kannalta taphdu mitään, mutta koska ehdot ovat joko `GET tai `POST` niin aina jokin heistä täyttyy.
+Jossa sijaitsee taulun poistamisen funktio, jolloin jos ehdot eivät täydy ei pylintin kannalta taphdu mitään, mutta koska ehdot ovat joko `GET` tai `POST` niin aina jokin heistä täyttyy.
 ## Similar lines in 2 files
 ```txt
 users.py:1:0: R0801: Similar lines in 2 files
