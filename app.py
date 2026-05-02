@@ -42,7 +42,8 @@ def show_user(user_id):
 
     user_items = users.get_items(user_id, limit=per_page, offset=offset)
     total_items = users.get_item_count(user_id)
-    return render_template("show_user.html", user=user, items=user_items, page=page, total_items=total_items)
+    return render_template("show_user.html", user=user, items=user_items, 
+                            page=page, total_items=total_items)
 
 @app.route("/messages")
 def list_chats():
@@ -54,10 +55,12 @@ def list_chats():
 def view_chat_item(item_id):
     require_login()
     item = items.get_item(item_id)
+
     if not item:
         abort(404)
     if session["user_id"] == item["user_id"]:
         return redirect("/messages")
+        
     return redirect(f"/messages/{item_id}/{item["user_id"]}")
 
 @app.route("/messages/<int:item_id>/<int:partner_id>")
@@ -71,7 +74,9 @@ def view_chat(item_id, partner_id):
     limit = page * 20
 
     chat_history = messages.get_chat_history(session["user_id"], item_id, partner_id, limit=limit)
-    return render_template("chat_room.html", item=item, chat_history=chat_history, partner_id=partner_id, page=page)
+    return render_template("chat_room.html", item=item, 
+                            chat_history=chat_history, 
+                            partner_id=partner_id, page=page)
 
 @app.route("/send_message/<int:item_id>", methods=["POST"])
 def send_message(item_id):
@@ -119,9 +124,7 @@ def edit_images(item_id):
         abort(404)
     if item["user_id"] != session["user_id"]:
         abort(403)
-
     images = items.get_images(item_id)
-
     return render_template("images.html", item=item, images=images)
 
 @app.route("/add_image", methods=["POST"])
@@ -130,6 +133,7 @@ def add_image():
     check_csrf()
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
+
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
@@ -159,6 +163,7 @@ def remove_images():
     check_csrf()
     item_id = request.form["item_id"]
     item = items.get_item(item_id)
+
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
@@ -173,6 +178,7 @@ def remove_images():
 def edit_item(item_id):
     require_login()
     item = items.get_item(item_id)
+
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
@@ -180,6 +186,7 @@ def edit_item(item_id):
 
     all_classes = items.get_all_classes()
     classes = {}
+
     for my_class in all_classes:
         classes[my_class] = ""
     for entry in items.get_classes(item_id):
@@ -196,6 +203,7 @@ def update_item():
     description = request.form["description"]
     price = request.form["price"]
     item = items.get_item(item_id)
+
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
@@ -209,6 +217,7 @@ def update_item():
 
     all_classes = items.get_all_classes()
     classes = []
+
     for entry in request.form.getlist("classes"):
         if entry:
             class_title, class_value = entry.split(":")
@@ -225,6 +234,7 @@ def update_item():
 def remove_item(item_id):
     require_login()
     item = items.get_item(item_id)
+
     if not item:
         abort(404)
     if item["user_id"] != session["user_id"]:
@@ -261,13 +271,15 @@ def find_item():
 
     return render_template("find_item.html", 
                             query=query, items=found_items, classes=classes, 
-                            all_classes=all_classes, search_done=search_done, page=page)
+                            all_classes=all_classes, search_done=search_done, 
+                            page=page)
 
 @app.route("/create_item", methods=["POST"])
 def create_item():
     require_login()
     check_csrf()
     title = request.form["title"]
+
     if not title or len(title) > 50:
         abort(403)
     description = request.form["description"]
@@ -304,6 +316,7 @@ def create():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+
     if not username or not password1 or not password2:
         flash("VIRHE: Tyhjä kenttä", "error")
         return render_template("register.html")

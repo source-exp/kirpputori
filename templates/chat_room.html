@@ -11,6 +11,7 @@
   {% endif %}  
 
   <div class="message">
+    {% if chat_history %}
     {% for msg in chat_history %}
     <p>
       <strong>
@@ -28,6 +29,7 @@
     <p class="navbar">
       <a href="/messages/{{ item.id }}/{{ partner_id }}?page={{ page + 1 }}">Lataa vanhempia viestejä</a>
     </p>
+    {% endif %}
     {% endif %}
   </div>
 
