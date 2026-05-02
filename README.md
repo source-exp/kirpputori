@@ -29,7 +29,7 @@ Voit käynnistää sovelluksen näin:
 $ flask run
 ```
 
-## Sovelluksen testattu suurella tietomäärällä
+## Sovelluksen testatus suurella tietomäärällä
 `seed.py` tiedostolla voi kokeila miten ohjelma käyttäytyy suurien tietomäärien kanssa. Kaikki tarvittavat kirjastot ovat valmiiksi asennettuna `Sovelluksen asennus` kohdalta.
 Koodi valmiiksi luo:
 * 100 käyttäjää
