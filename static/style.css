@@ -60,6 +60,7 @@ h1 {
   margin: 1em;
   padding: 0.2em 1em;
   background-color: #e8ffce;
+  border-radius: 8px;
 }
 
 .error {
@@ -67,6 +68,7 @@ h1 {
   margin: 1em;
   padding: 0.2em 1em;
   background-color: #ffc4c4;
+  border-radius: 8px;
 }
 
 .chat {
