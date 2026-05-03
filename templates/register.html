@@ -6,19 +6,19 @@
 
 <h1>Luo tunnus</h1>
   <form action="/create" method="post">
-    <p>
+    <label for="username">
       Tunnus: <br />
-      <input type="text" name="username" />
-    </p>
-    <p>
+      <input type="text" name="username" id="username" required />
+    </label>
+    <label for="password1">
       Salasana: <br />
-      <input type="password" name="password1" />
-    </p>
-    <p>
+      <input type="password" name="password1" id="password1" required />
+    </label>
+    <label for="password2">
       Salasana uudestaan: <br />
-      <input type="password" name="password2" />
-    </p>
-    <input type="submit" value="Luo tunnus" />
+      <input type="password" name="password2" id="password2" required />
+    </label>
+    <label for="submit"><input type="submit" value="Luo tunnus" id="submit" /></label>
   </form>
 
 {% endblock %}

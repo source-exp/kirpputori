@@ -6,7 +6,7 @@
   <div class="item">
   <h1>{{ item.title }}</h1>
   {% for image in images %}
-  <img src="/image/{{ image.id }}" />
+  <img src="/image/{{ image.id }}" alt="Kuva tuotteesta {{ item.title }}" />
   {% endfor %}
   <p class="item-description">{{ item.description }}</p>
   <p>

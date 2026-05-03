@@ -9,8 +9,8 @@
   <p>Haluatko varmasti poistaa tämän ilmoituksen?</p>
   <form class="navbar" action="/remove_item/{{ item.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="remove" value="Poista ilmoitus">
-    <input type="submit" name="back" value="Palaa takaisin">
+    <label for="remove"><input type="submit" name="remove" value="Poista ilmoitus" id="remove"></label>
+    <label for="back"><input type="submit" name="back" value="Palaa takaisin" id="back"></label>
   </form>
 
 {% endblock %}

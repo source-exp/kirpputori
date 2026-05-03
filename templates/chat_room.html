@@ -34,12 +34,12 @@
   </div>
 
   <form action="/send_message/{{ item.id }}" method="post">
-    <textarea name="content" required placeholder="Kirjoita viesti..."></textarea>
+    <label for="content"><textarea name="content" id="content" required placeholder="Kirjoita viesti..."></textarea></label>
     {% if session.user_id == item.user_id %}
     <input type="hidden" name="receiver_id" value="{{ partner_id }}">
     {% endif %}
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" value="Lähetä viesti">
+    <label for="submit"><input type="submit" id="submit" value="Lähetä viesti"></label>
   </form>
 
   <p class="navbar">

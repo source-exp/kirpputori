@@ -35,7 +35,9 @@ Koodi valmiiksi luo:
 * 100 käyttäjää
 * 25 ilmoitusta jokaiselle käyttäjälle
 * 25 viestiä satunaisille käyttäjälle
+
 Jokaisen käyttäjän salasanaksi on asetettu "0"
+
 Luodaan tietokanta seuraavalla komenolla:
 ```
 $ python3 seed.py
