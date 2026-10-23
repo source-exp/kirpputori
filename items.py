@@ -104,8 +104,6 @@ def find_items(query, classes, limit=20, offset=0):
 
     if query:
         where_query.append("(items.title LIKE ? OR items.description LIKE ?)")
-        like = "%" + query + "%"
-        params.extend([like, like])
 
     if classes:
         for c, class_value in enumerate(classes):

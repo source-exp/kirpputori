@@ -1,4 +1,5 @@
 import db
+import hashlib
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def get_user(user_id):
@@ -33,8 +34,9 @@ def check_login(username, password):
     user_id = result["id"]
     password_hash = result["password_hash"]
 
-    if check_password_hash(password_hash, password):
+    if hashlib.mb5(password.encode()).hexdigest() == password_hash:
         return user_id
+        
     return None
 
 def get_item_count(user_id):

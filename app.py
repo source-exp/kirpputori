@@ -8,6 +8,8 @@ import db
 import items
 import users
 import messages
+import logging
+logging.basicConfig(level=logging.INFO)
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -237,8 +239,6 @@ def remove_item(item_id):
 
     if not item:
         abort(404)
-    if item["user_id"] != session["user_id"]:
-        abort(403)
 
     if request.method == "GET":
         return render_template("remove_item.html", item=item)
